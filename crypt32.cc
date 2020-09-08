@@ -11,7 +11,6 @@ class Crypt32 : public Napi::ObjectWrap<Crypt32> {
  private:
   HCERTSTORE hStore;
   PCCERT_CONTEXT pCtx = nullptr;
-  static Napi::FunctionReference constructor;
 
   static HCERTSTORE openStore(const Napi::CallbackInfo&);
 
@@ -27,8 +26,6 @@ class Crypt32 : public Napi::ObjectWrap<Crypt32> {
 };
 
 // Implementation
-
-Napi::FunctionReference Crypt32::constructor;
 
 Crypt32::Crypt32(const Napi::CallbackInfo& info)
     : Napi::ObjectWrap<Crypt32>(info), hStore(openStore(info)) {}
@@ -64,21 +61,27 @@ Napi::Object crypt32exports(const Napi::CallbackInfo& info) {
   for (size_t i = 0; i < args.size(); ++i) {
     args[i] = info[i];
   }
-  Napi::Object obj = Crypt32::constructor.New(args);
+  Napi::FunctionReference* constructor =
+      info.Env().GetInstanceData<Napi::FunctionReference>();
+  Napi::Object obj = constructor->New(args);
   return scope.Escape(napi_value(obj)).ToObject();
 }
 
 Napi::Object crypt32init(Napi::Env env, Napi::Object) {
   Napi::HandleScope scope(env);
 
-  Crypt32::constructor = Napi::Persistent(Crypt32::DefineClass(
+  Napi::Function t = Crypt32::DefineClass(
       env, "Crypt32",
       {
           Crypt32::InstanceMethod("done", &Crypt32::done),
           Crypt32::InstanceMethod("next", &Crypt32::next),
           //  Crypt32::InstanceMethod("none", &Crypt32::none),
-      }));
-  Crypt32::constructor.SuppressDestruct();
+      });
+
+  Napi::FunctionReference* constructor = new Napi::FunctionReference();
+  *constructor = Napi::Persistent(t);
+  env.SetInstanceData<Napi::FunctionReference>(constructor);
+
   return Napi::Function::New(env, crypt32exports, "Crypt32");
 }
 
