@@ -13,3 +13,8 @@ stages:
       VSCODE_ARCH: ia32
     steps:
       - template: windows.yml
+
+trigger:
+  branches:
+   include:
+   - master
