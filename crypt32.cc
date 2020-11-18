@@ -1,11 +1,10 @@
 #include <Windows.h>
-
 #include <Wincrypt.h>
-
 #include <napi.h>
 
 class Crypt32 : public Napi::ObjectWrap<Crypt32> {
  public:
+  static Napi::Object Init(Napi::Env, Napi::Object);
   Crypt32(const Napi::CallbackInfo& info);
 
  private:
@@ -20,9 +19,6 @@ class Crypt32 : public Napi::ObjectWrap<Crypt32> {
 
   const uint8_t* begin() const { return pCtx->pbCertEncoded; }
   const uint8_t* end() const { return begin() + pCtx->cbCertEncoded; }
-
-  friend Napi::Object crypt32init(Napi::Env, Napi::Object);
-  friend Napi::Object crypt32exports(const Napi::CallbackInfo&);
 };
 
 // Implementation
@@ -55,34 +51,27 @@ Napi::Value Crypt32::none(const Napi::CallbackInfo& info) {
   return Napi::Boolean::New(info.Env(), !hStore);
 }
 
-Napi::Object crypt32exports(const Napi::CallbackInfo& info) {
-  Napi::EscapableHandleScope scope(info.Env());
-  std::vector<napi_value> args(info.Length());
-  for (size_t i = 0; i < args.size(); ++i) {
-    args[i] = info[i];
-  }
-  Napi::FunctionReference* constructor =
-      info.Env().GetInstanceData<Napi::FunctionReference>();
-  Napi::Object obj = constructor->New(args);
-  return scope.Escape(napi_value(obj)).ToObject();
-}
-
-Napi::Object crypt32init(Napi::Env env, Napi::Object) {
-  Napi::HandleScope scope(env);
-
-  Napi::Function t = Crypt32::DefineClass(
+Napi::Object Crypt32::Init(Napi::Env env, Napi::Object exports) {
+  Napi::Function func = DefineClass(
       env, "Crypt32",
       {
-          Crypt32::InstanceMethod("done", &Crypt32::done),
-          Crypt32::InstanceMethod("next", &Crypt32::next),
-          //  Crypt32::InstanceMethod("none", &Crypt32::none),
+          InstanceMethod<&Crypt32::done>("done"),
+          InstanceMethod<&Crypt32::next>("next"),
+          InstanceMethod<&Crypt32::none>("none"),
       });
 
   Napi::FunctionReference* constructor = new Napi::FunctionReference();
-  *constructor = Napi::Persistent(t);
+  *constructor = Napi::Persistent(func);
+  exports.Set("Crypt32", func);
   env.SetInstanceData<Napi::FunctionReference>(constructor);
 
-  return Napi::Function::New(env, crypt32exports, "Crypt32");
+  return exports;
 }
 
-NODE_API_MODULE(crypt32, crypt32init)
+// Initialize native add-on
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
+  Crypt32::Init(env, exports);
+  return exports;
+}
+
+NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)

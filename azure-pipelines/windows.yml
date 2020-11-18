@@ -1,0 +1,19 @@
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: "12.18.3"
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '2.x'
+    addToPath: true
+
+- powershell: |
+    $env:npm_config_arch="$(VSCODE_ARCH)"
+    npm install
+  displayName: Install Dependencies
+
+- powershell: |
+    npm test
+  displayName: Run Tests
+  condition: and(succeeded(), eq(variables['VSCODE_ARCH'], 'x64'))

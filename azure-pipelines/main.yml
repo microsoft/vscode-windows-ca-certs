@@ -1,0 +1,15 @@
+stages:
+- stage: Windows
+  pool:
+    vmImage: VS2017-Win2016
+  jobs:
+  - job: win_64
+    variables:
+      VSCODE_ARCH: x64
+    steps:
+      - template: windows.yml
+  - job: win_32
+    variables:
+      VSCODE_ARCH: ia32
+    steps:
+      - template: windows.yml
