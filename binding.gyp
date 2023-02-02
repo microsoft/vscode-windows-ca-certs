@@ -19,6 +19,19 @@
       ],
       "link_settings": {
         "libraries": ["-lcrypt32"]
+      },
+      'msvs_settings': {
+        'VCCLCompilerTool': {
+          'AdditionalOptions': [
+            '/Qspectre',
+            '/guard:cf'
+          ]
+        },
+        'VCLinkerTool': {
+          'AdditionalOptions': [
+            '/guard:cf'
+          ]
+        }
       }
     }
   ]

@@ -34,7 +34,7 @@
       "name": "Microsoft Corporation"
     }
   ],
-  "license": "ISC",
+  "license": "BSD",
   "bugs": {
     "url": "https://github.com/Microsoft/vscode-windows-ca-certs/issues"
   },
