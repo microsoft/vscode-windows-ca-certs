@@ -7,12 +7,12 @@ stages:
     variables:
       VSCODE_ARCH: x64
     steps:
-      - template: windows.yml
+      - template: templates/windows.yml
   - job: win_ia32
     variables:
       VSCODE_ARCH: ia32
     steps:
-      - template: windows.yml
+      - template: templates/windows.yml
 
 trigger:
   branches:
