@@ -27,15 +27,12 @@
             '/guard:cf',
             '/w34244',
             '/w34267',
-            '/ZH:SHA_256',
-            '/sdl'
+            '/ZH:SHA_256'
           ]
         },
         'VCLinkerTool': {
           'AdditionalOptions': [
-            '/guard:cf',
-            '/CETCOMPAT',
-            '/DYNAMICBASE'
+            '/guard:cf'
           ]
         }
       }
