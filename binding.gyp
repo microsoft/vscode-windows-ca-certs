@@ -20,19 +20,21 @@
       "link_settings": {
         "libraries": ["-lcrypt32"]
       },
-      'msvs_settings': {
-        'VCCLCompilerTool': {
-          'AdditionalOptions': [
-            '/Qspectre',
-            '/guard:cf',
-            '/w34244',
-            '/w34267',
-            '/ZH:SHA_256'
+      "msvs_configuration_attributes": {
+        "SpectreMitigation": "Spectre"
+      },
+      "msvs_settings": {
+        "VCCLCompilerTool": {
+          "AdditionalOptions": [
+            "/guard:cf",
+            "/we4244",
+            "/we4267",
+            "/ZH:SHA_256"
           ]
         },
-        'VCLinkerTool': {
-          'AdditionalOptions': [
-            '/guard:cf'
+        "VCLinkerTool": {
+          "AdditionalOptions": [
+            "/guard:cf"
           ]
         }
       }
