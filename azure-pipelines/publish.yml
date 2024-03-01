@@ -42,5 +42,8 @@ extends:
           - script: npm run test
             displayName: Compile & test npm package
 
+        apiScanSoftwareName: 'vscode-windows-ca-certs'
+        apiScanSoftwareVersion: '0.3'
+
         publishPackage: ${{ parameters.publishPackage }}
         packagePlatform: Windows
