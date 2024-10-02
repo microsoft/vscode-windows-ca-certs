@@ -1,6 +1,6 @@
 {
   "name": "@vscode/windows-ca-certs",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Get Windows System Root certificates",
   "os": [
     "win32"
@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/microsoft/vscode-windows-ca-certs",
   "dependencies": {
-    "node-addon-api": "^3.0.2"
+    "node-addon-api": "^8.2.0"
   },
   "devDependencies": {
     "bindings": "1.5.0",
