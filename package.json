@@ -1,6 +1,6 @@
 {
   "name": "@vscode/windows-ca-certs",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Get Windows System Root certificates",
   "os": [
     "win32"
